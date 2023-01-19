@@ -12,7 +12,11 @@ class CustomerRepository
 {
     public function all(): array
     {
-        return Customer::all()->toArray();
+        $customers = Customer::all();
+
+        return $customers->map(function ($customer) {
+            return new CustomerEntity($customer);
+        })->toArray();
     }
 
     public function create(CustomerStoreRequest $request): CustomerEntity
@@ -24,7 +28,11 @@ class CustomerRepository
     {
         $document = preg_replace('/\D/', '', $request->document);
 
-        return Customer::findByNameOrCpf($request->name, $document);
+        $customers = Customer::findByNameOrCpf($request->name, $document);
+
+        return $customers->map(function ($customer) {
+            return new CustomerEntity($customer);
+        })->toArray();
     }
 
     public function update(CustomerUpdateRequest $request, int $id): CustomerEntity
