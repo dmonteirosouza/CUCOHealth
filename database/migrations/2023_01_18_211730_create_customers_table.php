@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('document')->unique();
             $table->date('birthdate');
-            $table->string('phone')->unique();
+            $table->string('phone');
             $table->timestamps();
         });
     }

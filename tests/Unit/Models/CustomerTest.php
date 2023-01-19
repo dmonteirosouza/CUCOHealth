@@ -1,38 +1,39 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Models;
 
+use App\Models\Customer;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CustomerTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     public function test_document_attribute()
     {
-        $customer = new \App\Models\Customer();
+        $customer = new Customer();
         $customer->document = '12345678901';
         $this->assertEquals('123.456.789-01', $customer->document);
     }
 
     public function test_birthdate_attribute()
     {
-        $customer = new \App\Models\Customer();
+        $customer = new Customer();
         $customer->birthdate = '2021-01-01';
         $this->assertEquals('01/01/2021', $customer->birthdate);
     }
 
     public function test_phone_attribute()
     {
-        $customer = new \App\Models\Customer();
+        $customer = new Customer();
         $customer->phone = '11987654321';
         $this->assertEquals('(11) 98765-4321', $customer->phone);
     }
 
     public function test_create_customer()
     {
-        $customer = \App\Models\Customer::create([
+        $customer = Customer::create([
             'name' => 'John Doe',
             'document' => '12345678901',
             'birthdate' => '2021-01-01',
@@ -49,7 +50,7 @@ class CustomerTest extends TestCase
 
     public function test_update_customer()
     {
-        $customer = \App\Models\Customer::create([
+        $customer = Customer::create([
             'name' => 'John Doe',
             'document' => '12345678901',
             'birthdate' => '2021-01-01',
@@ -73,7 +74,7 @@ class CustomerTest extends TestCase
 
     public function test_delete_customer()
     {
-        $customer = \App\Models\Customer::create([
+        $customer = Customer::create([
             'name' => 'John Doe',
             'document' => '12345678901',
             'birthdate' => '2021-01-01',
@@ -92,23 +93,23 @@ class CustomerTest extends TestCase
 
     public function test_list_customers()
     {
-        $customers = \App\Models\Customer::factory()->count(10)->create();
+        $customers = Customer::factory()->count(10)->create();
 
         $this->assertCount(10, $customers);
     }
 
     public function test_show_customer()
     {
-        $customer = \App\Models\Customer::factory()->create();
+        $customer = Customer::factory()->create();
 
         $this->assertDatabaseHas('customers', $customer->getAttributes());
     }
 
     public function test_search_customer_by_name_or_document()
     {
-        $customer = \App\Models\Customer::factory()->create();
+        $customer = Customer::factory()->create();
 
-        $search = \App\Models\Customer::where('name', 'like', "%{$customer->name}%")
+        $search = Customer::where('name', 'like', "%{$customer->name}%")
             ->orWhere('document', 'like', "%{$customer->document}%")
             ->first();
 

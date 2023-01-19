@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('customers', \App\Http\Controllers\CustomerController::class);
+Route::get('/customers', [CustomerController::class, 'index']);
+Route::post('/customers', [CustomerController::class, 'store']);
+Route::get('/customers/search', [CustomerController::class, 'search']);
+Route::put('/customers/{customer}', [CustomerController::class, 'update']);
+Route::delete('/customers/{customer}', [CustomerController::class, 'destroy']);

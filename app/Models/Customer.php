@@ -20,6 +20,18 @@ class Customer extends Model
         'birthdate' => 'date',
     ];
 
+    public static function findByNameOrCpf(?string $name, ?string $document)
+    {
+        return self::where(function($query) use ($name, $document) {
+            if ($name) {
+                $query->where('name', 'LIKE', "%{$name}%");
+            }
+            if ($document) {
+                $query->orWhere('document', $document);
+            }
+        })->get();
+    }
+
     public function getDocumentAttribute($value)
     {
         return preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $value);
