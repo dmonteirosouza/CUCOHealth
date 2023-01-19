@@ -10,7 +10,7 @@ services:
         entrypoint:
             - /bin/sh
             - '-c'
-            - 'chown -R www-data:www-data /var/www && chmod +x entrypoint && ./entrypoint'
+            - 'chown -R www-data:www-data /var/www && chmod +x entrypoint && ./entrypoint && start-container'
         image: sail-8.2/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'

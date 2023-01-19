@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CustomerSearchRequest;
 use App\Http\Requests\CustomerStoreRequest;
 use App\Http\Requests\CustomerUpdateRequest;
-use App\Models\Customer;
+use App\Repositories\CustomerRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class CustomerController extends Controller
 {
+    public function __construct(private readonly CustomerRepository $customerRepository)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +22,7 @@ class CustomerController extends Controller
      */
     public function index(): JsonResponse
     {
-        $customers = Customer::all();
+        $customers = $this->customerRepository->all();
 
         return response()->json($customers);
     }
@@ -31,11 +35,7 @@ class CustomerController extends Controller
      */
     public function store(CustomerStoreRequest $request): JsonResponse
     {
-        $customer = new Customer;
-
-        $customer->fill($request->all());
-
-        $customer->save();
+        $customer = $this->customerRepository->create($request);
 
         return response()->json($customer, Response::HTTP_CREATED);
     }
@@ -48,9 +48,7 @@ class CustomerController extends Controller
      */
     public function search(CustomerSearchRequest $request): JsonResponse
     {
-        $document = preg_replace('/\D/', '', $request->document);
-
-        $customers = Customer::findByNameOrCpf($request->name, $document);
+        $customers = $this->customerRepository->search($request);
 
         $statusCode = $customers ? Response::HTTP_OK : Response::HTTP_NOT_FOUND;
 
@@ -61,12 +59,12 @@ class CustomerController extends Controller
      * Update the specified resource in storage.
      *
      * @param CustomerUpdateRequest $request
-     * @param  int  $id
+     * @param int $id
      * @return JsonResponse
      */
-    public function update(CustomerUpdateRequest $request, $id): JsonResponse
+    public function update(CustomerUpdateRequest $request, int $id): JsonResponse
     {
-        Customer::findOrFail($id)->update($request->all());
+        $this->customerRepository->update($request, $id);
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
@@ -74,12 +72,12 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return JsonResponse
      */
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        Customer::findOrFail($id)->delete();
+        $this->customerRepository->delete($id);
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
