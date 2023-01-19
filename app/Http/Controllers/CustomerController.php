@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerSearchRequest;
+use App\Http\Requests\CustomerStoreRequest;
+use App\Http\Requests\CustomerUpdateRequest;
 use App\Models\Customer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,10 +27,10 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param CustomerStoreRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(CustomerStoreRequest $request): JsonResponse
     {
         $customer = new Customer;
 
@@ -41,10 +44,10 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param $search
+     * @param CustomerSearchRequest $request
      * @return JsonResponse
      */
-    public function search(Request $request): JsonResponse
+    public function search(CustomerSearchRequest $request): JsonResponse
     {
         $document = preg_replace('/\D/', '', $request->document);
 
@@ -58,11 +61,11 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param CustomerUpdateRequest $request
      * @param  int  $id
-     * @return Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(CustomerUpdateRequest $request, $id): JsonResponse
     {
         Customer::findOrFail($id)->update($request->all());
 
@@ -73,9 +76,9 @@ class CustomerController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         Customer::findOrFail($id)->delete();
 
