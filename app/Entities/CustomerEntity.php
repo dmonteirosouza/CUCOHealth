@@ -13,28 +13,28 @@ class CustomerEntity
         $this->customer = $customer;
     }
 
-    public function create(array $data): Customer
+    public function create(array $data): self
     {
         $this->customer->create($data);
 
         return $this;
     }
 
-    public function update(array $data): Customer
+    public function update(array $data): self
     {
         $this->customer->update($data);
 
         return $this;
     }
 
-    public function delete(): Customer
+    public function delete(): self
     {
         $this->customer->delete();
 
         return $this;
     }
 
-    public function get(): CustomerModel
+    public function get(): Customer
     {
         return $this->customer;
     }
